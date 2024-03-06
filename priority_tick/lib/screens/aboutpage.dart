@@ -21,6 +21,7 @@ class _AboutPageState extends State<AboutPage> {
         MyHeader(
           height: 76, // Adjust the height as needed
           title: 'About me', // Add your title here
+          useBack: false,
         ),
         Padding(
           padding: EdgeInsets.all(16.0),

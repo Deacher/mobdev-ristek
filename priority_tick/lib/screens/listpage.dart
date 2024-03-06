@@ -12,13 +12,26 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  final tasksList = Tasks.todoList;
+  final tasksList = Tasks.tasksList;
   List<Tasks> _foundtask = [];
   final _taskController = TextEditingController();
 
   @override
   void initState() {
     _foundtask = tasksList;
+    _foundtask.sort((a, b) {
+      DateTime? dueDateA = a.dueDate != null ? DateTime.parse(a.dueDate!) : null;
+      DateTime? dueDateB = b.dueDate != null ? DateTime.parse(b.dueDate!) : null;
+
+      if (dueDateA == null) {
+        return 1;
+      } else if (dueDateB == null) {
+        return -1;
+      } else {
+        return dueDateA.difference(DateTime.now()).inDays.compareTo(
+            dueDateB.difference(DateTime.now()).inDays);
+      }
+    });
     super.initState();
   }
 
@@ -35,6 +48,7 @@ class _ListPageState extends State<ListPage> {
             child: MyHeader(
               height: 76,
               title: 'Priority Tick',
+              useBack: false,
             ),
           ),
           Container(
@@ -64,75 +78,28 @@ class _ListPageState extends State<ListPage> {
                           ),
                         ),
                       ),
-                      for (Tasks todoo in _foundtask.reversed)
-                        TaskAttr(
-                          todo: todoo,
-                          onChanged: _handleChange,
-                          onDelete: _deleteItem,
-                        ),
+                      
+                      if (_foundtask.isEmpty)
+                        Text(
+                          'You do not have any tasks',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'Gabarito',
+                          ),
+                        )
+                      else
+                        for (Tasks todoo in _foundtask)
+                          TaskAttr(
+                            task: todoo,
+                            onChanged: _handleChange,
+                            onDelete: _deleteItem,
+                          ),
                     ],
                   ),
                 )
               ],
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                    bottom: 20,
-                    right: 20,
-                    left: 20,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 10.0,
-                        spreadRadius: 0.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextField(
-                    controller: _taskController,
-                    decoration: InputDecoration(
-                        hintText: 'Add a new todo item',
-                        border: InputBorder.none),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                  bottom: 20,
-                  right: 20,
-                ),
-                child: ElevatedButton(
-                  child: Text(
-                    '+',
-                    style: TextStyle(
-                      fontSize: 40,
-                    ),
-                  ),
-                  onPressed: () {
-                    _addtask(_taskController.text);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    minimumSize: Size(60, 60),
-                    elevation: 10,
-                  ),
-                ),
-              ),
-            ]),
           ),
         ],
       ),
@@ -166,7 +133,7 @@ class _ListPageState extends State<ListPage> {
       _foundtask = results;
     });
   }
-
+  
   void _handleChange(Tasks task) {
     setState(() {
       task.isDone = !task.isDone;
@@ -177,13 +144,6 @@ class _ListPageState extends State<ListPage> {
     setState(() {
       Tasks.deleteTask(id);
     });
-  }
-
-  void _addtask(String task) {
-    setState(() {
-      Tasks.addTask(task);
-    });
-    _taskController.clear();
   }
 
   Widget searchBox() {

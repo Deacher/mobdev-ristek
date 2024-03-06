@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../model/tasks.dart';
 
 class TaskAttr extends StatelessWidget {
-  final Tasks todo;
+  final Tasks task;
   final onChanged;
   final onDelete;
 
   const TaskAttr({
     Key? key,
-    required this.todo,
+    required this.task,
     required this.onChanged,
     required this.onDelete,
   }) : super(key: key);
@@ -20,7 +20,7 @@ class TaskAttr extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20),
       child: ListTile(
         onTap: () {
-          onChanged(todo);
+          onChanged(task);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -28,17 +28,30 @@ class TaskAttr extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
+          task.isDone ? Icons.check_box : Icons.check_box_outline_blank,
           color: Colors.blue,
         ),
-        title: Text(
-          todo.taskText!,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontFamily: 'Gabarito',
-            decoration: todo.isDone ? TextDecoration.lineThrough : null,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              task.taskText!,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontFamily: 'Gabarito',
+                decoration: task.isDone ? TextDecoration.lineThrough : null,
+              ),
+            ),
+            if (task.dueDate != null)
+              Text(
+                'Due: ${task.dueDate}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+              ),
+          ],
         ),
         trailing: Container(
           padding: EdgeInsets.all(0),
@@ -54,7 +67,7 @@ class TaskAttr extends StatelessWidget {
             iconSize: 18,
             icon: Icon(Icons.close),
             onPressed: () {
-              onDelete(todo.id);
+              onDelete(task.id);
             },
           ),
         ),
