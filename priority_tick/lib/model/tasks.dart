@@ -9,14 +9,14 @@ class Tasks {
     this.isDone = false,
   });
 
-  static List<Tasks> todoList() {
-    return [
-      Tasks(id: '01', taskText: 'Morning Excercise', isDone: true ),
-      Tasks(id: '02', taskText: 'Buy Groceries', isDone: true ),
-      Tasks(id: '03', taskText: 'Check Emails', ),
-      Tasks(id: '04', taskText: 'Team Meeting', ),
-      Tasks(id: '05', taskText: 'Work on mobile apps for 2 hour', ),
-      Tasks(id: '06', taskText: 'Dinner with Jenny', ),
-    ];
+  static List<Tasks> todoList = [];
+
+  static void addTask(String taskText) {
+    final task = Tasks(id: DateTime.now().millisecondsSinceEpoch.toString(), taskText: taskText);
+    todoList.add(task);
+  }
+
+  static void deleteTask(String taskId) {
+    todoList.removeWhere((task) => task.id == taskId);
   }
 }

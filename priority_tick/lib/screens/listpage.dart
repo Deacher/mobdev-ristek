@@ -12,7 +12,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  final tasksList = Tasks.todoList();
+  final tasksList = Tasks.todoList;
   List<Tasks> _foundtask = [];
   final _taskController = TextEditingController();
 
@@ -76,64 +76,64 @@ class _ListPageState extends State<ListPage> {
               ],
             ),
           ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Row(children: [
-          //     Expanded(
-          //       child: Container(
-          //         margin: EdgeInsets.only(
-          //           bottom: 20,
-          //           right: 20,
-          //           left: 20,
-          //         ),
-          //         padding: EdgeInsets.symmetric(
-          //           horizontal: 20,
-          //           vertical: 5,
-          //         ),
-          //         decoration: BoxDecoration(
-          //           color: Colors.white,
-          //           boxShadow: const [
-          //             BoxShadow(
-          //               color: Colors.grey,
-          //               offset: Offset(0.0, 0.0),
-          //               blurRadius: 10.0,
-          //               spreadRadius: 0.0,
-          //             ),
-          //           ],
-          //           borderRadius: BorderRadius.circular(10),
-          //         ),
-          //         child: TextField(
-          //           controller: _taskController,
-          //           decoration: InputDecoration(
-          //               hintText: 'Add a new todo item',
-          //               border: InputBorder.none),
-          //         ),
-          //       ),
-          //     ),
-              // Container(
-              //   margin: EdgeInsets.only(
-              //     bottom: 20,
-              //     right: 20,
-              //   ),
-              //   child: ElevatedButton(
-              //     child: Text(
-              //       '+',
-              //       style: TextStyle(
-              //         fontSize: 40,
-              //       ),
-              //     ),
-              //     onPressed: () {
-              //       _addToDoItem(_taskController.text);
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       primary: Colors.blue,
-              //       minimumSize: Size(60, 60),
-              //       elevation: 10,
-              //     ),
-              //   ),
-              // ),
-          //   ]),
-          // ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(children: [
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                    bottom: 20,
+                    right: 20,
+                    left: 20,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 0.0),
+                        blurRadius: 10.0,
+                        spreadRadius: 0.0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    controller: _taskController,
+                    decoration: InputDecoration(
+                        hintText: 'Add a new todo item',
+                        border: InputBorder.none),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  bottom: 20,
+                  right: 20,
+                ),
+                child: ElevatedButton(
+                  child: Text(
+                    '+',
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
+                  ),
+                  onPressed: () {
+                    _addtask(_taskController.text);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    minimumSize: Size(60, 60),
+                    elevation: 10,
+                  ),
+                ),
+              ),
+            ]),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -167,24 +167,21 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
-  void _handleChange(Tasks todo) {
+  void _handleChange(Tasks task) {
     setState(() {
-      todo.isDone = !todo.isDone;
+      task.isDone = !task.isDone;
     });
   }
 
   void _deleteItem(String id) {
     setState(() {
-      tasksList.removeWhere((item) => item.id == id);
+      Tasks.deleteTask(id);
     });
   }
 
-  void _addToDoItem(String toDo) {
+  void _addtask(String task) {
     setState(() {
-      tasksList.add(Tasks(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        taskText: toDo,
-      ));
+      Tasks.addTask(task);
     });
     _taskController.clear();
   }
